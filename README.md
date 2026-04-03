@@ -56,22 +56,33 @@ Monitor listings, track trends, and analyze market dynamics with structured, ded
 
 ## FAQ
 
-<!-- WRITE: 4-6 Q&A pairs relevant to this product -->
+**How many job listings are on francetravail.fr?**
+France Travail (formerly Pôle Emploi) is France's official national employment portal with over 700,000 active listings at any given time, covering all industries and regions.
+
+**What contract types can I filter by?**
+The actor supports filtering by CDI (permanent), CDD (fixed-term), MIS (temporary/interim), SAI (seasonal), LIB (freelance/self-employed), and REP (takeover). Leave blank to return all contract types.
+
+**What location format should I use?**
+Use department codes suffixed with D — e.g. `75D` for Paris, `69D` for Lyon, `13D` for Marseille. You can also pass a city name or region name.
+
+**Does the actor include salary data?**
+Yes. When `includeDetails` is enabled, the actor fetches the detail page for each listing and extracts structured salary data: minimum, maximum, currency, period (hourly/monthly/annual), and the raw salary text.
 
 **Is it legal to scrape francetravail.fr?**
 Web scraping of publicly available data is generally legal. This actor only accesses publicly visible information. Always check the target site's terms of service for your specific use case.
 
 **How does incremental mode work?**
-Each listing gets a content hash. On subsequent runs, only new or changed listings are emitted — saving time, compute, and storage.
+Each listing gets a content hash based on title, salary, location, and description. On subsequent runs, only new or changed listings are emitted — saving time, compute, and storage.
 
 ---
 
 ## Known limitations
 
-<!-- WRITE: 4-6 honest limitations -->
-
-- <!-- WRITE: limitation 1 -->
-- <!-- WRITE: limitation 2 -->
+- **No official API access** — The actor scrapes the public HTML interface. France Travail has an official OAuth API, but it requires registration and has usage restrictions. The scraper works without credentials.
+- **Contact details availability** — Phone numbers and email addresses appear on a minority of listings and depend on the employer's preferences. Expect nulls for most listings.
+- **Skills extraction** — Skill tags are only present on listings where the employer explicitly structured them. Many listings have `null` for `skills` and `softSkills`.
+- **Result limits** — France Travail caps search results at roughly 1,000–1,100 listings per query, even if more matches exist. Use location filters to narrow searches for large queries.
+- **Dynamic availability** — Listings expire quickly on France Travail. A listing found during SERP collection may be unavailable by the time the detail fetch runs, resulting in a null description.
 
 ---
 
